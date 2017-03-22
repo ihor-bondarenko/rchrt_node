@@ -10,17 +10,16 @@ const IP = '10.0.0.158';
 class ReichertTcpClient {
     constructor(){
         this.client = new net.Socket();
+        this.client.setEncoding('utf8');
         this.init();
     }
     connect() {
-
-    }
-    init() {
-        this.client.setEncoding('utf8');
         this.client.connect(PORT,IP,() => {
             console.log('-- connected to server -- ');
         });
-
+    }
+    init() {
+        this.connect();
         this.client.on('data',(data) => {
             if(data.search('# you are now on the IOE-Command-Interface') !== -1) {
                 this.write('login api api');
@@ -34,6 +33,8 @@ class ReichertTcpClient {
                 console.log(' -- data received -- ');
                 console.log(this.client.bytesRead);
                 console.log(data);
+                let arr = data.split(/\n\r/);
+                console.log(arr);
             }
         });
 

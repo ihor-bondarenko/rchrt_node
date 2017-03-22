@@ -26,22 +26,23 @@ var ReichertTcpClient = function () {
         _classCallCheck(this, ReichertTcpClient);
 
         this.client = new _net2.default.Socket();
+        this.client.setEncoding('utf8');
         this.init();
     }
 
     _createClass(ReichertTcpClient, [{
         key: "connect",
-        value: function connect() {}
+        value: function connect() {
+            this.client.connect(PORT, IP, function () {
+                console.log('-- connected to server -- ');
+            });
+        }
     }, {
         key: "init",
         value: function init() {
             var _this = this;
 
-            this.client.setEncoding('utf8');
-            this.client.connect(PORT, IP, function () {
-                console.log('-- connected to server -- ');
-            });
-
+            this.connect();
             this.client.on('data', function (data) {
                 if (data.search('# you are now on the IOE-Command-Interface') !== -1) {
                     _this.write('login api api');
@@ -49,10 +50,14 @@ var ReichertTcpClient = function () {
                     _this.write('context client 1');
                 } else if (data.search('# context = CLIENT') !== -1) {
                     _this.write('main.action.login 0');
-                } else if (data.search('#') !== -1) {} else {
+                } else if (data.search('#') !== -1) {
+                    //
+                } else {
                     console.log(' -- data received -- ');
                     console.log(_this.client.bytesRead);
                     console.log(data);
+                    var arr = data.split(/\n\r/);
+                    console.log(arr);
                 }
             });
 

@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 import Logger from "./Logger"
 
 const PORT = 9001;
-const IP = '10.0.0.158';
+const IP = '10.0.0.187';
 let ReconnectCount = 0;
 class ReichertTcpClient {
     constructor(){
